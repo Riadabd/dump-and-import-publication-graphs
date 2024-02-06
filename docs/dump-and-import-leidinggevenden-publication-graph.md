@@ -30,7 +30,7 @@ Run the above query on [http://localhost:8890/sparql](http://localhost:8890/spar
 
 We first need to dump the graph using the `dump_one_graph` procedure: [https://vos.openlinksw.com/owiki/wiki/VOS/VirtRDFDatasetDump#Dump%20One%20Graph](https://vos.openlinksw.com/owiki/wiki/VOS/VirtRDFDatasetDump#Dump%20One%20Graph).
 
-It can be used to dump any single Named Graph:
+It can be used to dump any single named graph:
 
 ```
 CREATE PROCEDURE dump_one_graph
