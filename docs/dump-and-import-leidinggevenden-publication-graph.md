@@ -14,6 +14,36 @@ publication-triplestore:
     - ./config/publication-triple-store/virtuoso-production.ini:/data/virtuoso.ini
 ```
 
+## Backups
+
+If you are running this procedure on a work server, make sure to backup `virtuoso` and `publication-triplestore`.
+
+### Virtuoso
+
+```
+/data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=virtuoso" --format "{{.Names}}"`
+```
+
+Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtuoso_backup.sh`; confirm by checking the `/data/useful-scripts` folder.
+
+`[YOUR-PROJECT]` should be replaced by your intended application. In the case of `app-digitaal-loket`, there are 3 cases depending on which server you are using:
+* `DEV`:  `app-digitaal-loket-dev`
+* `QA`:   `app-digitaal-loket-qa`
+* `PROD`: `app-digitaal-loket`
+
+### Publication-triplestore
+
+```
+/data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=publication-triplestore" --format "{{.Names}}"`
+```
+
+Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtuoso_backup.sh`; confirm by checking the `/data/useful-scripts` folder.
+
+`[YOUR-PROJECT]` should be replaced by your intended application. In the case of `app-digitaal-loket`, there are 3 cases depending on which server you are using:
+* `DEV`:  `app-digitaal-loket-dev`
+* `QA`:   `app-digitaal-loket-qa`
+* `PROD`: `app-digitaal-loket`
+
 ## Count Check
 
 ```

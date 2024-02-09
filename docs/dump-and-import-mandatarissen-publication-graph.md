@@ -1,6 +1,6 @@
 # Mandatarissen
 
-This doc assumes that `virtuoso` and `publication-triplestore` production data are loaded in your local repository docker containers.
+This document assumes that `virtuoso` and `publication-triplestore` production data are loaded in your local repository docker containers.
 
 With production data, it's better to add the following to your `docker-compose.override.yml` so that the databases use their production configurations:
 
@@ -13,6 +13,36 @@ publication-triplestore:
   volumes:
     - ./config/publication-triple-store/virtuoso-production.ini:/data/virtuoso.ini
 ```
+
+## Backups
+
+If you are running this procedure on a work server, make sure to backup `virtuoso` and `publication-triplestore`.
+
+### Virtuoso
+
+```
+/data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=virtuoso" --format "{{.Names}}"`
+```
+
+Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtuoso_backup.sh`; confirm by checking the `/data/useful-scripts` folder.
+
+`[YOUR-PROJECT]` should be replaced by your intended application. In the case of `app-digitaal-loket`, there are 3 cases depending on which server you are using:
+* `DEV`:  `app-digitaal-loket-dev`
+* `QA`:   `app-digitaal-loket-qa`
+* `PROD`: `app-digitaal-loket`
+
+### Publication-triplestore
+
+```
+/data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=publication-triplestore" --format "{{.Names}}"`
+```
+
+Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtuoso_backup.sh`; confirm by checking the `/data/useful-scripts` folder.
+
+`[YOUR-PROJECT]` should be replaced by your intended application. In the case of `app-digitaal-loket`, there are 3 cases depending on which server you are using:
+* `DEV`:  `app-digitaal-loket-dev`
+* `QA`:   `app-digitaal-loket-qa`
+* `PROD`: `app-digitaal-loket`
 
 ## Count Check
 
