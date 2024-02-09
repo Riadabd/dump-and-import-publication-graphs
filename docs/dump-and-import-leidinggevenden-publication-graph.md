@@ -1,6 +1,6 @@
 # Leidinggevenden
 
-This doc assumes that `virtuoso` and `publication-triplestore` production data are loaded in your local repository docker containers.
+This document assumes that `virtuoso` and `publication-triplestore` production data are loaded in your local repository docker containers.
 
 With production data, it's better to add the following to your `docker-compose.override.yml` so that the databases use their production configurations:
 
@@ -175,7 +175,7 @@ After importing the data into `publication-triplestore`, delete the graph and al
 CLEAR GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer>
 ```
 
-Enter `virtuoso`'s `isql-v` interface again (`docker compose exec virtuoso isql-v`) and executing a checkpoint:
+Enter `virtuoso`'s `isql-v` interface again (`docker compose exec virtuoso isql-v`) and execute a checkpoint:
 
 ```
 SQL> exec('checkpoint');

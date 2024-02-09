@@ -175,7 +175,7 @@ After importing the data into `publication-triplestore`, delete the graph and al
 CLEAR GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer>
 ```
 
-Enter `virtuoso`'s `isql-v` interface again (`docker compose exec virtuoso isql-v`) and executing a checkpoint:
+Enter `virtuoso`'s `isql-v` interface again (`docker compose exec virtuoso isql-v`) and execute a checkpoint:
 
 ```
 SQL> exec('checkpoint');
