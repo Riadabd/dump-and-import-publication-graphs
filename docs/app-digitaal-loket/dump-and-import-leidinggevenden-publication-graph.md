@@ -1,4 +1,4 @@
-# Mandatarissen
+# Leidinggevenden
 
 This document assumes that `virtuoso` and `publication-triplestore` production data are loaded in your local repository docker containers.
 
@@ -11,7 +11,7 @@ virtuoso:
 
 publication-triplestore:
   volumes:
-    - ./config/publication-triple-store/virtuoso-production.ini:/data/virtuoso.ini
+    - ./config/publication-triplestore/virtuoso-production.ini:/data/virtuoso.ini
 ```
 
 ## Backups
@@ -48,7 +48,7 @@ Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtu
 
 ```
 SELECT COUNT(*) WHERE {
-  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
+  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer> {
     ?s ?p ?o .
   }
 }
@@ -136,15 +136,15 @@ CREATE PROCEDURE dump_one_graph
 ;
 ```
 
-Copy and paste the above procedure inside the `isql-v` virtuoso interface (`docker compose exec virtuoso isql-v`) and run it; this will load the procedure and allow you to call it. Create a new folder inside `app-digitaal-loket` (`mkdir data/db/mandatarissen_producer_delta_producer_graph_dump`) and run this command:
+Copy and paste the above procedure inside the `isql-v` virtuoso interface (`docker compose exec virtuoso isql-v`) and run it; this will load the procedure and allow you to call it. Create a new folder inside `app-digitaal-loket` (`mkdir data/db/leidinggevenden_producer_delta_producer_graph_dump`) and run this command:
 
 ```
-SQL> dump_one_graph ('http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer', './mandatarissen_producer_delta_producer_graph_dump/data_', 1000000000);
+SQL> dump_one_graph ('http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer', './leidinggevenden_producer_delta_producer_graph_dump/data_', 1000000000);
 
 SQL> exec('checkpoint');
 ```
 
-This will dump the `<http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer>` graph into `data_XXX.ttl.gz` and `data_XXX.ttl.graph` files (located in your `data/db/mandatarissen_producer_delta_producer_graph_dump/` folder):
+This will dump the `<http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer>` graph into `data_XXX.ttl.gz` and `data_XXX.ttl.graph` files (located in your `data/db/leidinggevenden_producer_delta_producer_graph_dump/` folder):
 
 ```
 $ ls
@@ -166,30 +166,30 @@ Unzip and keep original:   gzip -dk <.gz>
 
 The goal is to import the dumped data into `publication-triplestore`.
 
-Add the below into your `docker-compose.override.yml` file; note the second `volumes` entry that maps the dumped data from the previous section into `/tmp/mandatarissen_producer_delta_producer_graph_dump/`.
+Add the below into your `docker-compose.override.yml` file; note the second `volumes` entry that maps the dumped data from the previous section into `/tmp/leidinggevenden_producer_delta_producer_graph_dump/`.
 
 ```
 publication-triplestore:
   volumes:
     - ./config/publication-triple-store/virtuoso-production.ini:/data/virtuoso.ini
-    - /path/to/data/db/mandatarissen_producer_delta_producer_graph_dump/:/tmp/mandatarissen_producer_delta_producer_graph_dump
+    - /path/to/data/db/leidinggevenden_producer_delta_producer_graph_dump/:/tmp/leidinggevenden_producer_delta_producer_graph_dump
 ```
 
 Run `docker compose up -d publication-triplestore && docker compose exec publication-triplestore isql-v` and execute the below command in the `isql-v` interface to import the files (replace xxx by the `.ttl` files you find inside). Follow it up by running a checkpoint:
 
 ```
-SQL> DB.DBA.TTLP_MT(file_to_string_output('/tmp/mandatarissen_producer_delta_producer_graph_dump/data_xxx.ttl'), '', 'http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer');
+SQL> DB.DBA.TTLP_MT(file_to_string_output('/tmp/leidinggevenden_producer_delta_producer_graph_dump/data_xxx.ttl'), '', 'http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer');
 
 SQL> exec('checkpoint');
 ```
 
-In the case of `mandatarissen`, there will most likely be only one file (`/tmp/mandatarissen_producer_delta_producer_graph_dump/data_000001.ttl`).
+In the case of `leidinggevenden`, there will most likely be only one file (`/tmp/leidinggevenden_producer_delta_producer_graph_dump/data_000001.ttl`).
 
 ### Count Check
 
 ```
 SELECT COUNT(*) WHERE {
-  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
+  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer> {
     ?s ?p ?o .
   }
 }
@@ -202,7 +202,7 @@ Run the above query on [http://localhost:8890/sparql](http://localhost:8890/spar
 After importing the data into `publication-triplestore`, delete the graph and all its entries from `virtuoso` by running the following query inside the `virtuoso` SPARQL endpoint (`localhost:8890/sparql` by default):
 
 ```
-CLEAR GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer>
+CLEAR GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer>
 ```
 
 Enter `virtuoso`'s `isql-v` interface again (`docker compose exec virtuoso isql-v`) and execute a checkpoint:
@@ -215,7 +215,7 @@ SQL> exec('checkpoint');
 
 ```
 SELECT COUNT(*) WHERE {
-  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
+  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer> {
     ?s ?p ?o .
   }
 }
