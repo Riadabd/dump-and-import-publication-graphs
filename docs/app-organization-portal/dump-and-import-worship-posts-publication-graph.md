@@ -135,9 +135,11 @@ CREATE PROCEDURE dump_one_graph
 Copy and paste the above procedure inside the `isql-v` triplestore interface (`docker compose exec triplestore isql-v`) and run it; this will load the procedure and allow you to call it. Create a new folder inside `app-organization-portal` (`mkdir data/db/worship_posts_producer_delta_producer_graph_dump`) and run this command:
 
 ```
-SQL> dump_one_graph ('http://redpencil.data.gift/id/deltas/producer/worship-posts', './worship_posts_producer_delta_producer_graph_dump/data_', 1000000000);
+dump_one_graph ('http://redpencil.data.gift/id/deltas/producer/worship-posts', './worship_posts_producer_delta_producer_graph_dump/data_', 1000000000);
+```
 
-SQL> exec('checkpoint');
+```
+exec('checkpoint');
 ```
 
 This will dump the `<http://redpencil.data.gift/id/deltas/producer/worship-posts>` graph into `data_XXX.ttl.gz` and `data_XXX.ttl.graph` files (located in your `data/db/worship_posts_producer_delta_producer_graph_dump/` folder):
