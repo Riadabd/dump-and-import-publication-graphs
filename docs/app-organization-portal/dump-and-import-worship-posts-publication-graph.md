@@ -192,7 +192,7 @@ exec('checkpoint');
 
 ```sparql
 SELECT COUNT(*) WHERE {
-  GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-leidinggevenden-producer> {
+  GRAPH <http://redpencil.data.gift/id/deltas/producer/worship-posts> {
     ?s ?p ?o .
   }
 }
