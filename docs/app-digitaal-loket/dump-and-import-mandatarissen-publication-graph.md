@@ -4,7 +4,7 @@ This document assumes that `virtuoso` and `publication-triplestore` production d
 
 With production data, it's better to add the following to your `docker-compose.override.yml` so that the databases use their production configurations:
 
-```
+```yaml
 virtuoso:
   volumes:
     - ./config/virtuoso/virtuoso-production.ini:/data/virtuoso.ini
@@ -20,7 +20,7 @@ If you are running this procedure on a work server, make sure to backup `virtuos
 
 ### Virtuoso
 
-```
+```sh
 /data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=virtuoso" --format "{{.Names}}"`
 ```
 
@@ -33,7 +33,7 @@ Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtu
 
 ### Publication-triplestore
 
-```
+```sh
 /data/useful-scripts/virtuoso-backup.sh `docker ps --filter "label=com.docker.compose.project=[YOUR-PROJECT]" --filter "label=com.docker.compose.service=publication-triplestore" --format "{{.Names}}"`
 ```
 
@@ -46,7 +46,7 @@ Depending on the server you may be on, `virtuoso-backup.sh` may be called `virtu
 
 ## Count Check
 
-```
+```sparql
 SELECT COUNT(*) WHERE {
   GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
     ?s ?p ?o .
@@ -168,7 +168,7 @@ The goal is to import the dumped data into `publication-triplestore`.
 
 Add the below into your `docker-compose.override.yml` file; note the second `volumes` entry that maps the dumped data from the previous section into `/tmp/mandatarissen_producer_delta_producer_graph_dump/`.
 
-```
+```yaml
 publication-triplestore:
   volumes:
     - ./config/publication-triple-store/virtuoso-production.ini:/data/virtuoso.ini
@@ -187,7 +187,7 @@ In the case of `mandatarissen`, there will most likely be only one file (`/tmp/m
 
 ### Count Check
 
-```
+```sparql
 SELECT COUNT(*) WHERE {
   GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
     ?s ?p ?o .
@@ -201,7 +201,7 @@ Run the above query on [http://localhost:8890/sparql](http://localhost:8890/spar
 
 After importing the data into `publication-triplestore`, delete the graph and all its entries from `virtuoso` by running the following query inside the `virtuoso` SPARQL endpoint (`localhost:8890/sparql` by default):
 
-```
+```sparql
 CLEAR GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer>
 ```
 
@@ -213,7 +213,7 @@ SQL> exec('checkpoint');
 
 ### Count Check
 
-```
+```sparql
 SELECT COUNT(*) WHERE {
   GRAPH <http://redpencil.data.gift/id/deltas/producer/loket-mandatarissen-producer> {
     ?s ?p ?o .
